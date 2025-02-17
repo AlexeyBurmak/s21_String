@@ -1,0 +1,176 @@
+#test s21_to_upper_1
+const char *input = "hello";
+char *output = s21_to_upper(input);
+ck_assert_str_eq(output, "HELLO");
+free(output);
+
+#test s21_to_upper_2
+const char *input = "HELLO";
+char *output = s21_to_upper(input);
+ck_assert_str_eq(output, "HELLO");
+free(output);
+
+#test s21_to_upper_3
+const char *input = "12345";
+char *output = s21_to_upper(input);
+ck_assert_str_eq(output, "12345");
+free(output);
+
+#test s21_to_upper_4
+const char *input = "";
+char *output = s21_to_upper(input);
+ck_assert_str_eq(output, "");
+free(output);
+
+#test s21_to_upper_5
+const char *input = "Hello, World!";
+char *output = s21_to_upper(input);
+ck_assert_str_eq(output, "HELLO, WORLD!");
+free(output);
+
+#test s21_to_upper_6
+const char *input = NULL;
+char *output = s21_to_upper(input);
+ck_assert_ptr_eq(output, NULL);
+
+#test s21_to_upper_7
+const char *input = "@}";
+char *output = s21_to_upper(input);
+ck_assert_str_eq(output, "@}");
+free(output);
+
+#test s21_to_lower_1
+const char *input = "HELLO";
+char *output = s21_to_lower(input);
+ck_assert_str_eq(output, "hello");
+free(output);
+
+#test s21_to_lower_2
+const char *input = "hello";
+char *output = s21_to_lower(input);
+ck_assert_str_eq(output, "hello");
+free(output);
+
+#test s21_to_lower_3
+const char *input = "12345";
+char *output = s21_to_lower(input);
+ck_assert_str_eq(output, "12345");
+free(output);
+
+#test s21_to_lower_4
+const char *input = "";
+char *output = s21_to_lower(input);
+ck_assert_str_eq(output, "");
+free(output);
+
+#test s21_to_lower_5
+const char *input = "Hello, World!";
+char *output = s21_to_lower(input);
+ck_assert_str_eq(output, "hello, world!");
+free(output);
+
+#test s21_to_lower_6
+const char *input = NULL;
+char *output = s21_to_lower(input);
+ck_assert_ptr_eq(output, NULL);
+
+#test s21_to_lower_7
+const char *input = "@}";
+char *output = s21_to_lower(input);
+ck_assert_str_eq(output, "@}");
+free(output);
+
+#test s21_insert_1
+const char *src = "Hello world\0";
+const char *str = "beautiful ";
+int start_index = 6;
+char *result = s21_insert(src, str, start_index);
+ck_assert_str_eq(result, "Hello beautiful world");
+free(result);
+
+#test s21_insert_2
+const char *src = "a\n\0";
+const char *str = "bc";
+int start_index = 1;
+char *result = s21_insert(src, str, start_index);
+ck_assert_str_eq(result, "abc\n");
+free(result);
+
+#test s21_insert_3
+const char *src = " \n\0";
+const char *str = "Hello";
+int start_index = 1;
+char *result = s21_insert(src, str, start_index);
+ck_assert_str_eq(result, " Hello\n");
+free(result);
+
+#test s21_insert_4
+const char *src = "\0";
+const char *str = "Empty";
+int start_index = 0;
+char *result = s21_insert(src, str, start_index);
+ck_assert_str_eq(result, "Empty");
+free(result);
+
+#test s21_insert_5
+const char *src = "Test\0";
+const char *str = "123";
+int start_index = 10;
+char *result = s21_insert(src, str, start_index);
+ck_assert_ptr_null(result);
+
+#test s21_insert_6
+const char *src = NULL;
+const char *str = "Test";
+int start_index = 0;
+char *result = s21_insert(src, str, start_index);
+ck_assert_ptr_null(result);
+
+#test s21_insert_7
+const char *src = "Test";
+const char *str = "";
+int start_index = 0;
+char *result = s21_insert(src, str, start_index);
+ck_assert_str_eq(result, "Test");
+free(result);
+
+#test s21_insert_8
+const char *src = "Test";
+const char *str = "123";
+int start_index = -1;
+char *result = s21_insert(src, str, start_index);
+ck_assert_ptr_null(result);
+
+#test s21_insert_9
+const char *src = "Test";
+const char *str = NULL;
+int start_index = 0;
+char *result = s21_insert(src, str, start_index);
+ck_assert_ptr_null(result);
+
+#test s21_trim_1
+const char *src = " Hello, world! \0";
+const char *trim_chars = " ,!";
+char *new_str = s21_trim(src, trim_chars);
+ck_assert_str_eq(new_str, "Hello, world");
+free(new_str);
+
+#test s21_trim_2
+const char *src = " Hello, world! \0";
+const char *trim_chars = NULL;
+char *new_str = s21_trim(src, trim_chars);
+ck_assert_ptr_null(new_str);
+
+#test s21_trim_3
+const char *src = NULL;
+const char *trim_chars = " ,!";
+char *new_str = s21_trim(src, trim_chars);
+ck_assert_ptr_null(new_str);
+
+#test s21_trim_4
+const char *src = "     \0";
+const char *trim_chars = " ";
+char *new_str = s21_trim(src, trim_chars);
+ck_assert_str_eq(new_str, "");
+free(new_str);
+

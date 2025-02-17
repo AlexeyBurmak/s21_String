@@ -1,0 +1,246 @@
+#test s21_parse_sign_1
+const char *input1 = "\v   +42";
+int sign1 = 1;
+s21_parse_sign(&input1, &sign1);
+ck_assert_int_eq(sign1, 1);
+ck_assert_str_eq(input1, "42");
+
+#test s21_parse_sign_2
+const char *input2 = "\t-123";
+int sign2 = 1;
+s21_parse_sign(&input2, &sign2);
+ck_assert_int_eq(sign2, -1);
+ck_assert_str_eq(input2, "123");
+
+#test s21_parse_sign_3
+const char *input3 = "\f\n   ";
+int sign3 = 1;
+s21_parse_sign(&input3, &sign3);
+ck_assert_int_eq(sign3, 1);
+ck_assert_str_eq(input3, "");
+
+#test s21_parse_sign_4
+const char *input4 = "\r-42";
+int sign4 = 1;
+s21_parse_sign(&input4, &sign4);
+ck_assert_int_eq(sign4, -1);
+ck_assert_str_eq(input4, "42");
+
+#test s21_parse_integer_1
+const char *number_input1 = "123";
+int number_result1 = s21_parse_integer(&number_input1);
+ck_assert_int_eq(number_result1, 123);
+
+#test s21_parse_integer_2
+const char *number_input2 = "-456";
+int number_result2 = s21_parse_integer(&number_input2);
+ck_assert_int_eq(number_result2, -456);
+
+#test s21_parse_integer_3
+const char *number_input3 = "0";
+int number_result3 = s21_parse_integer(&number_input3);
+ck_assert_int_eq(number_result3, 0);
+
+#test s21_parse_integer_4
+const char *number_input4 = "123abc";
+int number_result4 = s21_parse_integer(&number_input4);
+ck_assert_int_eq(number_result4, 123);
+
+#test s21_parse_integer_5
+const char *number_input5 = "  -123  ";
+int number_result5 = s21_parse_integer(&number_input5);
+ck_assert_int_eq(number_result5, -123);
+
+#test s21_char_to_int_1
+const char *input5 = "   +123";
+ck_assert_int_eq(s21_char_to_int(input5), atoi(input5));
+
+#test s21_char_to_int_2
+const char *input6 = "   -456";
+ck_assert_int_eq(s21_char_to_int(input6), atoi(input6));
+
+#test s21_char_to_int_3
+const char *input7 = "abc";
+ck_assert_int_eq(s21_char_to_int(input7), 0);
+
+#test s21_char_to_int_4
+const char *input8 = "";
+ck_assert_int_eq(s21_char_to_int(input8), 0);
+
+#test s21_char_to_int_5
+const char *input9 = "2147483647";
+ck_assert_int_eq(s21_char_to_int(input9), atoi(input9));
+
+#test s21_char_to_int_6
+const char *input10 = "-2147483648";
+ck_assert_int_eq(s21_char_to_int(input10), atoi(input10));
+
+#test s21_char_to_double_1
+const char *double_input1 = "3.14";
+ck_assert(fabs(s21_char_to_double(double_input1) - atof(double_input1)) < EPSILON);
+
+#test s21_char_to_double_2
+const char *double_input2 = "-2.71828";
+ck_assert(fabs(s21_char_to_double(double_input2) - atof(double_input2)) < EPSILON);
+
+#test s21_char_to_double_3
+const char *double_input3 = "100e2";
+ck_assert(fabs(s21_char_to_double(double_input3) - atof(double_input3)) < EPSILON);
+
+#test s21_char_to_double_4
+const char *double_input4 = "   +0.001";
+ck_assert(fabs(s21_char_to_double(double_input4) - atof(double_input4)) < EPSILON);
+
+#test s21_char_to_double_5
+const char *double_input5 = "0.000123abc";
+ck_assert(fabs(s21_char_to_double(double_input5) - atof(double_input5)) < EPSILON);
+
+#test s21_char_to_double_6
+const char *double_input6 = "";
+ck_assert(fabs(s21_char_to_double(double_input6) - atof(double_input6)) < EPSILON);
+
+#test s21_char_to_double_7
+const char *double_input7 = "abc";
+ck_assert(fabs(s21_char_to_double(double_input7) - atof(double_input7)) < EPSILON);
+
+#test s21_char_to_double_8
+const char *double_input_empty = "";
+ck_assert(fabs(s21_char_to_double(double_input_empty) - atof(double_input_empty)) < EPSILON);
+
+#test s21_char_to_double_9
+const char *double_input_invalid = "abc";
+ck_assert(fabs(s21_char_to_double(double_input_invalid) - atof(double_input_invalid)) < EPSILON);
+
+#test s21_char_to_double_10
+const char *double_input_exponent1 = "1.2e+3";
+ck_assert(fabs(s21_char_to_double(double_input_exponent1) - atof(double_input_exponent1)) < EPSILON);
+
+#test s21_char_to_double_11
+const char *double_input_exponent2 = "1.2E-3";
+ck_assert(fabs(s21_char_to_double(double_input_exponent2) - atof(double_input_exponent2)) < EPSILON);
+
+#test s21_char_to_double_12
+const char *double_input_exponent3 = "1e0";
+ck_assert(fabs(s21_char_to_double(double_input_exponent3) - atof(double_input_exponent3)) < EPSILON);
+
+#test s21_format_to_base_1
+char s21_result[20];
+char lib_result[20];
+int num = 126;
+s21_format_to_base(num, 16, "0123456789ABCDEF", s21_result);
+sprintf(lib_result, "%X", num);
+ck_assert_str_eq(s21_result, lib_result);
+
+#test s21_format_to_base_2
+char s21_result[20];
+char lib_result[20];
+int num = 0;
+s21_format_to_base(num, 16, "0123456789ABCDEF", s21_result);
+sprintf(lib_result, "%X", num);
+ck_assert_str_eq(s21_result, lib_result);
+
+#test s21_format_to_base_4
+char s21_result[20];
+char lib_result[20];
+int num = 126;
+s21_format_to_base(num, 8, "01234567", s21_result);
+sprintf(lib_result, "%o", num);
+ck_assert_str_eq(s21_result, lib_result);
+
+#test s21_parse_specifier_sp_and_size_conditions
+s21_specifier param;
+memset(&param, 0, sizeof(param));
+param.sp = 0;
+param.size = 'h';
+int result = s21_parse_specifier("test", &param, NULL);
+ck_assert_int_eq(result, -1);
+
+
+#test s21_flag_space_second_space
+s21_specifier param;
+param.flags.space = 0;
+param.flags.plus = 0;
+param.flags.minus = 0;
+param.flags.grid = 0;
+param.flags.zero = 0;
+param.isSimplePercent = 0;
+int result1 = s21_flag_space(&param); 
+ck_assert_int_eq(result1, 0);
+ck_assert_int_eq(param.flags.space, 1);
+int result2 = s21_flag_space(&param);
+ck_assert_int_eq(result2, -1);
+
+#test s21_sci_inf_positive_uppercase
+char result[10];
+s21_sci_inf(result, 1.0, 1);
+ck_assert_str_eq(result, "INF");
+
+#test s21_sci_inf_positive_lowercase
+char result[10];
+s21_sci_inf(result, 1.0, 0);
+ck_assert_str_eq(result, "inf");
+
+#test s21_sci_inf_negative_uppercase
+char result[10];
+s21_sci_inf(result, -1.0, 1);
+ck_assert_str_eq(result, "-INF");
+
+#test s21_sci_inf_negative_lowercase
+char result[10];
+s21_sci_inf(result, -1.0, 0);
+ck_assert_str_eq(result, "-inf");
+
+#test s21_sci_nan_uppercase
+char result[10];
+s21_sci_nan(result, 1);
+ck_assert_str_eq(result, "NAN");
+
+#test s21_sci_nan_lowercase
+char result[10];
+s21_sci_nan(result, 0);
+ck_assert_str_eq(result, "nan");
+
+#test s21_parse_specifier_simple_percent
+s21_specifier param;
+memset(&param, 0, sizeof(param));
+const char *input = "%%";
+va_list ap; 
+int len = s21_parse_specifier(input, &param, &ap); 
+ck_assert_int_eq(len, 1);
+ck_assert_int_eq(param.isSimplePercent, 1);
+
+#test s21_flags_parce_invalid_flags
+s21_specifier param;
+memset(&param, 0, sizeof(param));
+const char *input = "%++";
+int len = s21_flags_parce(input, &param); // Call the function
+ck_assert_int_eq(len, -1);
+
+#test s21_flags_parce_second_minus
+s21_specifier param;
+memset(&param, 0, sizeof(param));
+const char *input = "--";
+int result = s21_flags_parce(input, &param);
+ck_assert_int_eq(result, -1);
+ck_assert_int_eq(param.flags.minus, 1);
+
+#test s21_flags_parce_second_zero
+s21_specifier param;
+memset(&param, 0, sizeof(param));
+const char *input = "00";
+int result = s21_flags_parce(input, &param);
+ck_assert_int_eq(result, -1);
+ck_assert_int_eq(param.flags.zero, 1);
+
+#test s21_flags_parce_second_hash
+s21_specifier param;
+memset(&param, 0, sizeof(param));
+const char *input = "##";
+int result = s21_flags_parce(input, &param);
+ck_assert_int_eq(result, -1);
+ck_assert_int_eq(param.flags.grid, 1);
+
+
+
+
+

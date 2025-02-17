@@ -1,0 +1,365 @@
+#test s21_sprintf_no_specifier_1
+char dest[6000];
+char orig[6000];
+s21_sprintf(dest, "azaza! uRURu");
+sprintf(orig, "azaza! uRURu");
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_s_1
+char dest[6000];
+char orig[6000];
+char *val0 = " ";
+char *val1 = "azaza";
+char *val2 = "djkf      sdKJDSH Fksd j!@&^#G SDK   JHsd43    ";
+s21_sprintf(dest, "%-16s %10s %s %s", val1, val0, val2, "yes!");
+sprintf(orig, "%-16s %10s %s %s", val1, val0, val2, "yes!");
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_c_1
+char dest[6000];
+char orig[6000];
+char val1 = '#';
+char val2 = 'J';
+char val3 = ' ';
+char val4 = '9';
+s21_sprintf(dest, "%c %10c %-6c %c %lc", val1, val2, val3, '8', val4);
+sprintf(orig, "%c %10c %-6c %c %lc", val1, val2, val3, '8', val4);
+ck_assert_str_eq(dest, orig);
+
+
+
+#test s21_sprintf_f_0
+char dest[6000];
+char orig[6000];
+double val0 = 0;
+float val1 = -121.9876543210;
+double val2 = -232.9876543210;
+long double val3 = -454.9876543210;
+s21_sprintf(dest, "'%8.1lf' '%#6.0f' '%-6.0f' '%-6.0lf' '%-8.0Lf'", val0, val1, val1, val2, val3);
+sprintf(orig, "'%8.1lf' '%#6.0f' '%-6.0f' '%-6.0lf' '%-8.0Lf'", val0, val1, val1, val2, val3);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_f_1
+char dest[6000];
+char orig[6000];
+float val0 = 0;
+float val1 = 3.1415;
+float val2 = -373.1551;
+s21_sprintf(dest, "%f %-+10.*f % 012.12f", val0, 3, val1, val2);
+sprintf(orig, "%f %-+10.*f % 012.12f", val0, 3, val1, val2);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_lf_1
+char dest[6000];
+char orig[6000];
+double val0 = 0;
+double val1 = 4.1415;
+double val2 = DBL_MIN;
+s21_sprintf(dest, "%lf %-+10.*lf %lf", val0, 3, val1, val2);
+sprintf(orig, "%lf %-+10.*lf %lf", val0, 3, val1, val2);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_Lf_1
+char dest[6000];
+char orig[6000];
+long double val0 = 0;
+long double val1 = 5.1415;
+long double val2 = -5273.1551;
+s21_sprintf(dest, "%Lf %-+10.*Lf % 012.8Lf", val0, 3, val1, val2);
+sprintf(orig, "%Lf %-+10.*Lf % 012.8Lf", val0, 3, val1, val2);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_l
+char dest[100];
+char orig[100];
+long int val = -1234567890L;
+s21_sprintf(dest, "%ld", val);
+sprintf(orig, "%ld", val);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_L
+char dest[100];
+char orig[100];
+long double val = 123456.789L;
+s21_sprintf(dest, "%Lf", val);
+sprintf(orig, "%Lf", val);
+ck_assert_str_eq(dest, orig);
+
+
+#test s21_sprintf_u_1
+char dest[6000];
+char orig[6000];
+unsigned int val0 = 0;
+unsigned int val1 = 228;
+unsigned int val2 = -228;
+unsigned int val3 = UINT_MAX;
+unsigned int val4 = val3 + 64;
+s21_sprintf(dest, "'%u' '%08u' '%-20u' '%20u' '%u'", val0, val1, val2, val3, val4);
+sprintf(orig, "'%u' '%08u' '%-20u' '%20u' '%u'", val0, val1, val2, val3, val4);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_hu_1
+char dest[6000];
+char orig[6000];
+unsigned short int val0 = 0;
+unsigned short int val1 = 228;
+unsigned short int val2 = -228;
+unsigned short int val3 = USHRT_MAX;
+unsigned short int val4 = val3 + 64;
+s21_sprintf(dest, "'%hu' '%08hu' '%-20hu' '%20hu' '%hu'", val0, val1, val2, val3, val4);
+sprintf(orig, "'%hu' '%08hu' '%-20hu' '%20hu' '%hu'", val0, val1, val2, val3, val4);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_lu_1
+char dest[6000];
+char orig[6000];
+unsigned long int val0 = 0;
+unsigned long int val1 = 228;
+unsigned long int val2 = -228;
+unsigned long int val3 = ULONG_MAX;
+unsigned long int val4 = val3 + 64;
+s21_sprintf(dest, "'%lu' '%08lu' '%-10lu' '%lu' '%8lu'", val0, val1, val2, val3, val4);
+sprintf(orig, "'%lu' '%08lu' '%-10lu' '%lu' '%8lu'", val0, val1, val2, val3, val4);
+ck_assert_str_eq(dest, orig);
+
+
+
+#test s21_sprintf_f_round
+char dest[6000];
+char orig[6000];
+long double val0 = 1.0;
+double val1 = 228.0;
+float val2 = 741.0;
+double val3 = 0.0;
+char * format = "%.7Lf %f %f %.6f";
+s21_sprintf(dest, format, val0, val1, val2, val3);
+sprintf(orig, format, val0, val1, val2, val3);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_d_1
+char dest[6000];
+char orig[6000];
+int val0 = 0;
+int val1 = 228;
+int val2 = 741;
+int val3 = -273;
+s21_sprintf(dest, "%d %+d % 07d %+012d %-20d %+12d", val0, val1, val2, val3, INT_MIN, INT_MAX);
+sprintf(orig, "%d %+d % 07d %+012d %-20d %+12d", val0, val1, val2, val3, INT_MIN, INT_MAX);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_d_2
+char dest[6000];
+char orig[6000];
+int val1 = 228;
+s21_sprintf(dest, "%-10d", val1);
+sprintf(orig, "%-10d", val1);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_i_1
+char dest[6000];
+char orig[6000];
+int val1 = 228;
+short int val2 = -228;
+long int val3 = 228228;
+s21_sprintf(dest, "%i %i %-10hi % 012li", 0, val1, val2, val3);
+sprintf(orig, "%i %i %-10hi % 012li", 0, val1, val2, val3);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_e_1
+char dest[6000];
+char orig[6000];
+float val0 = 0;
+float val1 = 228.79;
+float val2 = -740.898;
+float val3 = 8800.5553535;
+s21_sprintf(dest, "%e %-+20.2e %#.0e % 0*.*E", val0, val1, val2, 18, 8, val3);
+sprintf(orig, "%e %-+20.2e %#.0e % 0*.*E", val0, val1, val2, 18, 8, val3);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_le_1
+char dest[6000];
+char orig[6000];
+double val0 = 0;
+double val1 = 228.79;
+double val2 = -740.898;
+double val3 = 8800.5553535;
+s21_sprintf(dest, "%le %-+20.2le %#.0le % 0*.*lE", val0, val1, val2, 18, 8, val3);
+sprintf(orig, "%le %-+20.2le %#.0le % 0*.*lE", val0, val1, val2, 18, 8, val3);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_Le_1
+char dest[6000];
+char orig[6000];
+long double val0 = 0;
+long double val1 = 228.79;
+long double val2 = -740.898;
+long double val3 = 8800.5553535;
+s21_sprintf(dest, "%Le %-+20.2Le %#.0Le % 0*.*LE", val0, val1, val2, 18, 8, val3);
+sprintf(orig, "%Le %-+20.2Le %#.0Le % 0*.*LE", val0, val1, val2, 18, 8, val3);
+ck_assert_str_eq(dest, orig);
+
+
+
+#test s21_sprintf_x_1
+char dest[6000];
+char orig[6000];
+unsigned int val1 = 255;
+int val2 = -1024;
+s21_sprintf(dest, "%x %x %-10x %-10x", val1, val2, val1, val2);
+sprintf(orig, "%x %x %-10x %-10x", val1, val2, val1, val2);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_X_1
+char dest[6000];
+char orig[6000];
+unsigned int val1 = 255;
+int val2 = -1024;
+s21_sprintf(dest, "%X %X %-10X %-10X", val1, val2, val1, val2);
+sprintf(orig, "%X %X %-10X %-10X", val1, val2, val1, val2);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_x_2
+char dest[6000];
+char orig[6000];
+int val1 = -10;
+s21_sprintf(dest, "%x", val1);
+sprintf(orig, "%x", val1);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_X_2
+char dest[6000];
+char orig[6000];
+int val1 = -1024;
+s21_sprintf(dest, "%X", val1);
+sprintf(orig, "%X", val1);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_o_1
+char dest[6000];
+char orig[6000];
+unsigned int val1 = 255;  // 0377
+s21_sprintf(dest, "%o", val1);
+sprintf(orig, "%o", val1);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_o_width
+char dest[6000];
+char orig[6000];
+unsigned int val1 = 255;  // 0377
+s21_sprintf(dest, "%10o", val1);
+sprintf(orig, "%10o", val1);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_p_1
+char dest[100];
+char orig[100];
+void *ptr = (void *)0x1234abcd;
+s21_sprintf(dest, "%p", ptr);
+sprintf(orig, "%p", ptr);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_p_2
+char dest[100];
+char orig[100];
+void *ptr = NULL;
+s21_sprintf(dest, "%p", ptr);
+sprintf(orig, "%p", ptr);
+ck_assert_str_eq(dest, orig);
+
+
+#test s21_sprintf_x_grid
+char dest[100];
+char orig[100];
+unsigned int val = 255;
+s21_sprintf(dest, "%#x", val);
+sprintf(orig, "%#x", val);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_X_grid
+char dest[100];
+char orig[100];
+unsigned int val = 255;
+s21_sprintf(dest, "%#X", val);
+sprintf(orig, "%#X", val);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_o_grid
+char dest[100];
+char orig[100];
+unsigned int val = 8;
+s21_sprintf(dest, "%#o", val);
+sprintf(orig, "%#o", val);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_h
+char dest[100];
+char orig[100];
+short int val = -1234;
+s21_sprintf(dest, "%hd", val);
+sprintf(orig, "%hd", val);
+ck_assert_str_eq(dest, orig);
+
+#test s21_add_sign_1
+char dest[6000] = "Azaza";
+char orig[6000] = "+Azaza";
+char c = '+';
+s21_add_sign(dest, c);
+ck_assert_str_eq(dest, orig);
+
+#test s21_fraction_length_1
+char dest[6000] = "123.45678912345";
+char orig[6000] = "123.4567";
+s21_fraction_length(dest, 4);
+ck_assert_str_eq(dest, orig);
+
+#test s21_fraction_length_2
+char dest[6000] = "123.45678912345";
+char orig[6000] = "123.45678912";
+s21_fraction_length(dest, 8);
+ck_assert_str_eq(dest, orig);
+
+#test s21_fraction_length_3
+char dest[6000] = "123.45678912345";
+char orig[6000] = "123.456789";
+s21_fraction_length(dest, 6);
+ck_assert_str_eq(dest, orig);
+
+#test s21_double_percent_1
+char dest[6000];
+char orig[6000];
+long double val1 = -9123.464;
+int val2 = 123;
+char * format = "%%%Lf%%%dLALALA";
+s21_sprintf(dest, format, val1, val2);
+sprintf(orig, format, val1, val2);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_zero_flag_positive
+char dest[100];
+char orig[100];
+s21_sprintf(dest, "%05d", 42);
+sprintf(orig, "%05d", 42);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_zero_flag_negative
+char dest[100];
+char orig[100];
+s21_sprintf(dest, "%05d", -42);
+sprintf(orig, "%05d", -42);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_zero_flag_space
+char dest[100];
+char orig[100];
+s21_sprintf(dest, "% 05d", 42);
+sprintf(orig, "% 05d", 42);
+ck_assert_str_eq(dest, orig);
+
+#test s21_sprintf_zero_flag_plus
+char dest[100];
+char orig[100];
+s21_sprintf(dest, "%+05d", 42);
+sprintf(orig, "%+05d", 42);
+ck_assert_str_eq(dest, orig);
+
+
